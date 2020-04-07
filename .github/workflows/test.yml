@@ -10,7 +10,7 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
       - name: Unit Tests
-        run: yarn test --watchAll=false
+        run: yarn test:coverage
       - name: E2E Tests
         uses: cypress-io/github-action@v1
         with:
