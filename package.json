@@ -18,7 +18,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "test:ci": "set CI=true && react-scripts test",
     "test": "react-scripts test",
+    "test:watch": "react-scripts test",
+    "test:coverage": "set CI=true && react-scripts test --coverage",
     "cypress": "cypress open",
     "eject": "react-scripts eject"
   },
