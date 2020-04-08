@@ -5,29 +5,73 @@ import {loadRestaurants} from '../restaurants/actions';
 
 describe('restaurants', () => {
   describe('loadRestaurants action', () => {
-    it('stores the restaurants', async () => {
+    describe('initially', () => {
+      it('does not have the loading flag set', () => {
+        const initialState = {};
+
+        const store = createStore(
+          restaurantsReducer,
+          initialState,
+          applyMiddleware(thunk),
+        );
+
+        expect(store.getState().loading).toEqual(false);
+      });
+    });
+
+    describe('while loading', () => {
+      it('sets a loading flag', () => {
+        const api = {
+          loadRestaurants: () => new Promise(() => {}),
+        };
+
+        const initialState = {};
+
+        const store = createStore(
+          restaurantsReducer,
+          initialState,
+          applyMiddleware(thunk.withExtraArgument(api)),
+        );
+
+        store.dispatch(loadRestaurants());
+
+        expect(store.getState().loading).toEqual(true);
+      });
+    });
+
+    describe('when loading succeeds', () => {
       const records = [
         {id: 1, name: 'Sushi Place'},
         {id: 2, name: 'Pizza Place'},
       ];
 
-      const api = {
-        loadRestaurants: () => Promise.resolve(records),
-      };
+      let store;
 
-      const initialState = {
-        records: [],
-      };
+      beforeEach(() => {
+        const api = {
+          loadRestaurants: () => Promise.resolve(records),
+        };
 
-      const store = createStore(
-        restaurantsReducer,
-        initialState,
-        applyMiddleware(thunk.withExtraArgument(api)),
-      );
+        const initialState = {
+          records: [],
+        };
 
-      await store.dispatch(loadRestaurants());
+        store = createStore(
+          restaurantsReducer,
+          initialState,
+          applyMiddleware(thunk.withExtraArgument(api)),
+        );
 
-      expect(store.getState().records).toEqual(records);
+        return store.dispatch(loadRestaurants());
+      });
+
+      it('stores the restaurants', () => {
+        expect(store.getState().records).toEqual(records);
+      });
+
+      it('clears the loading flag', () => {
+        expect(store.getState().loading).toEqual(false);
+      });
     });
   });
 });
