@@ -16,3 +16,8 @@ jobs:
         with:
           start: yarn start
           wait-on: 'http://localhost:3000'
+      - name: Archive jest coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: jest-coverage
+          path: jest-coverage
