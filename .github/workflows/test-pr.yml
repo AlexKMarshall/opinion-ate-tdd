@@ -1,0 +1,42 @@
+name: Test
+on: push
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Pre test
+        run: yarn pretest
+      - name: Unit Tests
+        run: yarn test:coverage
+      - name: E2E Tests
+        uses: cypress-io/github-action@v1
+        with:
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+      - name: Combine coverage
+        run: |
+          yarn precopy:reports
+          yarn precombine:reports
+          yarn prereport:combined
+          yarn posttest
+      - name: Archive jest coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: jest-coverage
+          path: jest-coverage
+      - name: Archive combined coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: combined-coverage
+          path: coverage
+      - name: RISE Code Coverage Report
+        uses: risetechnologies/lcov-reporter-action@1.0.4
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info

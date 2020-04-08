@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cypress/code-coverage": "^3.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+    "istanbul-lib-coverage": "^3.0.0",
+    "nyc": "^15.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
@@ -16,10 +19,22 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
+    "test:ci": "set CI=true && react-scripts test",
     "test": "react-scripts test",
+    "test:watch": "react-scripts test",
+    "test:coverage": "set CI=true && react-scripts test --coverage --coverageDirectory=jest-coverage",
     "cypress": "cypress open",
+    "pretest": "rm -rf .nyc_output || true",
+    "posttest": "yarn run report:combined",
+    "mkdir:reports": "mkdir reports || true",
+    "precopy:reports": "yarn run mkdir:reports",
+    "copy:reports": "cp cypress-coverage/coverage-final.json reports/from-cypress.json && cp jest-coverage/coverage-final.json reports/from-jest.json",
+    "precombine:reports": "yarn run copy:reports && mkdir .nyc_output || true",
+    "combine:reports": "nyc merge reports && mv coverage.json .nyc_output/out.json",
+    "prereport:combined": "yarn run combine:reports",
+    "report:combined": "nyc report --reporter lcov --report-dir coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@cypress/instrument-cra": "^1.1.0",
     "cypress": "^4.3.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
@@ -45,5 +61,17 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-prettier": "^3.1.2",
     "prettier": "^2.0.4"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!**/serviceWorker.js",
+      "!**/index.js"
+    ]
+  },
+  "nyc": {
+    "report-dir": "cypress-coverage"
   }
 }
