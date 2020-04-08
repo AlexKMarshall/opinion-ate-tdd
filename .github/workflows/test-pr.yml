@@ -1,5 +1,5 @@
-name: TestPullRequest
-on: pull_request
+name: Test
+on: push
 
 jobs:
   test:
@@ -34,8 +34,11 @@ jobs:
         with:
           name: combined-coverage
           path: coverage
-      - name: RISE Code Coverage Report
-        uses: risetechnologies/lcov-reporter-action@1.0.4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./coverage/lcov.info
+      - name: Echo github
+        run: echo ${{ github }}
+#      - name: RISE Code Coverage Report
+#        uses: risetechnologies/lcov-reporter-action@1.0.4
+#        if: github.event=="pull"
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          lcov-file: ./coverage/lcov.info
