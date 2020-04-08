@@ -35,7 +35,7 @@ jobs:
           name: combined-coverage
           path: coverage
       - name: Echo github
-        run: echo ${{ github }}
+        run: echo ${{ JSON.stringify(github) }}
 #      - name: RISE Code Coverage Report
 #        uses: risetechnologies/lcov-reporter-action@1.0.4
 #        if: github.event=="pull"
