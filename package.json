@@ -26,6 +26,15 @@
     "test:watch": "react-scripts test",
     "test:coverage": "set CI=true && react-scripts test --coverage --coverageDirectory=jest-coverage",
     "cypress": "cypress open",
+    "pretest": "rm -rf .nyc_output || true",
+    "posttest": "yarn run report:combined",
+    "mkdir:reports": "mkdir reports || true",
+    "precopy:reports": "yarn run mkdir:reports",
+    "copy:reports": "cp cypress-coverage/coverage-final.json reports/from-cypress.json && cp jest-coverage/coverage-final.json reports/from-jest.json",
+    "precombine:reports": "yarn run copy:reports && mkdir .nyc_output || true",
+    "combine:reports": "nyc merge reports && mv coverage.json .nyc_output/out.json",
+    "prereport:combined": "yarn run combine:reports",
+    "report:combined": "nyc report --reporter lcov --report-dir coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
