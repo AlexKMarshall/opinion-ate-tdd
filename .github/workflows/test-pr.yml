@@ -1,5 +1,5 @@
 name: Test-push
-on: push
+on: pull-request
 
 jobs:
   test:
@@ -34,3 +34,8 @@ jobs:
         with:
           name: combined-coverage
           path: coverage
+      - name: RISE Code Coverage Report
+        uses: risetechnologies/lcov-reporter-action@1.0.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info
