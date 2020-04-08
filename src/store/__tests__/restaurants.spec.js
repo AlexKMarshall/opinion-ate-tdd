@@ -168,7 +168,7 @@ describe('restaurants', () => {
 
     describe('when save fails', () => {
       it('rejects', () => {
-        api.createRestaurant.mockRecjectedValue();
+        api.createRestaurant.mockRejectedValue();
         promise = store.dispatch(createRestaurant(newRestaurantName));
         return expect(promise).rejects.toBeUndefined();
       });
