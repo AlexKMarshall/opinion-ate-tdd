@@ -1,4 +1,4 @@
-name: TestPR
+name: TestPush
 on: push
 
 jobs:

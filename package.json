@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@cypress/code-coverage": "^3.0.0",
+    "@material-ui/core": "^4.9.9",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -26,6 +27,7 @@
     "test:watch": "react-scripts test",
     "test:coverage": "set CI=true && react-scripts test --coverage --coverageDirectory=jest-coverage",
     "cypress": "cypress open",
+    "cypress:run": "cypress run",
     "pretest": "rm -rf .nyc_output || true",
     "posttest": "yarn run report:combined",
     "mkdir:reports": "mkdir reports || true",
@@ -35,6 +37,8 @@
     "combine:reports": "nyc merge reports && mv coverage.json .nyc_output/out.json",
     "prereport:combined": "yarn run combine:reports",
     "report:combined": "nyc report --reporter lcov --report-dir coverage",
+    "tests:report": "yarn run precopy:reports && yarn run precombine:reports && yarn run prereport:combined && yarn run posttest",
+    "tests:complete": "yarn run retest && yarn run test:coverage && yarn run tests:report",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
