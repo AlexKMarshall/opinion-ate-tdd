@@ -61,5 +61,8 @@
       "!**/serviceWorker.js",
       "!**/index.js"
     ]
+  },
+  "nyc": {
+    "report-dir": "cypress-coverage"
   }
 }
