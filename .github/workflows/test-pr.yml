@@ -35,11 +35,11 @@ jobs:
           name: combined-coverage
           path: coverage
       - name: Echo PR
-        if: github.event_name == "pull_request"
-        run: echo "PR"
+        if: github.event_name == 'pull_request'
+        run: echo PR
       - name: Echo Push
-        if: github.event_name == "push"
-        run: echo "push"
+        if: github.event_name == 'push'
+        run: echo push
 #      - name: RISE Code Coverage Report
 #        uses: risetechnologies/lcov-reporter-action@1.0.4
 #        if: github.event=="pull"
